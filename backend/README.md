@@ -1,4 +1,4 @@
-#Model a Manga Reading Database
+# Model a Manga Reading Database
 
 Every Record will have:  
 Created At - datetime  
