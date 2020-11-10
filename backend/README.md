@@ -1,4 +1,4 @@
-# Dendencies
+# Dependencies
 
 - Docker
 - Node js
@@ -6,7 +6,7 @@
 
 # How To
 
-make sure docker is running,§
+make sure docker is running
 ```
 docker-compose up 
 ```
@@ -16,7 +16,7 @@ npm run migrate
 npm run seed
 ```
 
-go to localhost:8080 to view created db, default credentials in .env
+go to localhost:8080 for adminer panel to view created db , default credentials in .env
 
 # Model a Manga Reading Database
 
