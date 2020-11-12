@@ -1,134 +1,135 @@
+/* eslint-disable linebreak-style */
 module.exports = [
     {
-        name:"Action",
-        
+        name: 'Action'
+
     }, {
-        name:"Comedy",
-        
+        name: 'Comedy'
+
     }, {
-        name:"Adventure",
-        
+        name: 'Adventure'
+
     }, {
-        name:"Slice of Life",
-        
+        name: 'Slice of Life'
+
     }, {
-        name:"Drama",
-        
+        name: 'Drama'
+
     }, {
-        name:"Magic",
-        
+        name: 'Magic'
+
     }, {
-        name:"Fantasy",
-        
+        name: 'Fantasy'
+
     }, {
-        name:"Horror",
-        
+        name: 'Horror'
+
     }, {
-        name:"Mystery",
-        
+        name: 'Mystery'
+
     }, {
-        name:"Psychological",
-        
+        name: 'Psychological'
+
     }, {
-        name:"Romance",
-        
+        name: 'Romance'
+
     }, {
-        name:"Sci-Fi",
-        
+        name: 'Sci-Fi'
+
     }, {
-        name:"Cyberpunk",
-        
+        name: 'Cyberpunk'
+
     }, {
-        name:"Game",
-        
+        name: 'Game'
+
     }, {
-        name:"Ecchi",
-        
+        name: 'Ecchi'
+
     }, {
-        name:"Demons",
-        
+        name: 'Demons'
+
     }, {
-        name:"Harem",
-        
+        name: 'Harem'
+
     }, {
-        name:"Josei",
-        
+        name: 'Josei'
+
     }, {
-        name:"Martial Arts",
-        
+        name: 'Martial Arts'
+
     }, {
-        name:"Kids",
-        
+        name: 'Kids'
+
     }, {
-        name:"Historical",
-        
+        name: 'Historical'
+
     }, {
-        name:"Hentai",
-        
+        name: 'Hentai'
+
     }, {
-        name:"Isekai",
-        
+        name: 'Isekai'
+
     }, {
-        name:"Military",
-        
+        name: 'Military'
+
     }, {
-        name:"Mecha",
-        
+        name: 'Mecha'
+
     }, {
-        name:"Music",
-        
+        name: 'Music'
+
     }, {
-        name:"Parody",
-        
+        name: 'Parody'
+
     }, {
-        name:"Police",
-        
+        name: 'Police'
+
     }, {
-        name:"Post-Apocalyptic",
-        
+        name: 'Post-Apocalyptic'
+
     }, {
-        name:"Reverse Harem",
-        
+        name: 'Reverse Harem'
+
     }, {
-        name:"School",
-        
+        name: 'School'
+
     }, {
-        name:"Seinen",
-        
+        name: 'Seinen'
+
     }, {
-        name:"Shoujo",
-        
+        name: 'Shoujo'
+
     }, {
-        name:"Shoujo-ai",
-        
+        name: 'Shoujo-ai'
+
     }, {
-        name:"Shounen",
-        
+        name: 'Shounen'
+
     }, {
-        name:"Shounen-ai",
-        
+        name: 'Shounen-ai'
+
     }, {
-        name:"Space",
-        
+        name: 'Space'
+
     }, {
-        name:"Sports",
-        
+        name: 'Sports'
+
     }, {
-        name:"Super Power",
-        
+        name: 'Super Power'
+
     }, {
-        name:"Tragedy",
-        
+        name: 'Tragedy'
+
     }, {
-        name:"Vampire",
-        
+        name: 'Vampire'
+
     }, {
-        name:"Yuri",
-        
+        name: 'Yuri'
+
     }, {
-        name:"Yaoi",
-        
+        name: 'Yaoi'
+
     }, {
-        name:"Supernatural",
-    }, 
-]
+        name: 'Supernatural'
+    }
+];

@@ -44,7 +44,6 @@ exports.up = async (knex) => {
         table.string('artist',254);
         table.string('reading_direction',254);
         table.text('description');
-        table.text('related_mangas');
         
         // references(table,tableNames.genre, true, 'genres');
         table.text('genres');

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const tableNames = require('./tableNames');
 
 module.exports = [
@@ -7,4 +8,4 @@ module.exports = [
     // tableNames.related_manga,
     tableNames.manga,
     tableNames.genre
-]
+];
