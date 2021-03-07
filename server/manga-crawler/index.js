@@ -24,6 +24,7 @@ app.get('/', async (req, res) => {
 
                 const chapterImages = await getChapterImages(mangaData[mangaName][i].chapterLink);
                 mangaData[mangaName][i].chapterImages.push(chapterImages.images);
+                console.log(mangaData);
             }));
             Promise.all(chapterImagesArray)
                 .then(() => {
@@ -38,7 +39,7 @@ app.get('/', async (req, res) => {
                     return mangaData;
                 });
         };
-        const mangaName = '111';
+        const mangaName = 'road-to-naruto-the-movie';
         MangaData(mangaName);
     } catch (error) {
         console.log(`an error occoured: ${error}`);

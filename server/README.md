@@ -74,7 +74,7 @@ Dependencies:
         * [X] array of images urls
         * [X] chapter amount
 
-    * [] 
+    * [V] 
 
 * [] FanFox
     * [] get Manga

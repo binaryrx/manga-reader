@@ -1,0 +1,79 @@
+.latest-updates {
+    max-width: 1100px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 3rem;
+        margin: 0 0 2rem;
+        padding: 0 0 0.25rem;
+        border-bottom: 1px solid #dedede;
+    }
+
+    &-content {
+        display: flex;
+        flex-flow: row wrap;
+    }
+}
+
+.manga-preview {
+    display: flex;
+    flex-flow: row;
+    margin-bottom: 1.5rem;
+    @media #{$mq-lg} {
+        width: 33%;
+    }
+    @media #{$mq-md} {
+        width: 50%;
+    }
+    @media #{$mq-sm} {
+        width: 100%;
+    }
+
+    &-image {
+        img {
+            width: 100px;
+            height: 110px;
+        }
+    }
+
+    &-text {
+        display: flex;
+        flex-flow: column;
+        @media #{$mq-md}, #{$mq-lg} {
+            padding: 0 1.5rem 0 0.75rem;
+        }
+        @media #{$mq-sm} {
+            padding: 0 0.5rem 0 0.75rem;
+            width: 100%;
+        }
+    }
+    &-footer {
+        margin: auto 0 0.5rem;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        font-size: 1.1rem;
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+
+    &-summary {
+        font-size: 1rem;
+    }
+
+    &-chapterNum {
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+
+    &-updatedAt {
+    }
+}

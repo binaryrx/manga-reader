@@ -1,0 +1,26 @@
+{
+  "name": "manga-reader",
+  "version": "1.0.0",
+  "description": "See the [backend](./backend) folder for more info about the db",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-server" : "cd ./client && npm run start",
+    "start-client" : "cd ./server && docker-compose up",
+    "start" :  "concurrently \"npm run start-server\" \"npm run start-client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binaryrx/manga-reader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/binaryrx/manga-reader/issues"
+  },
+  "homepage": "https://github.com/binaryrx/manga-reader#readme",
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  }
+}
