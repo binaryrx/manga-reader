@@ -207,7 +207,7 @@ export const NavigationNightModeBtn = styled.button`
         cursor: pointer;
         text-indent: -9999px;
         width: 4rem;
-        height: 2.2rem;
+        height: 2.4rem;
         background: #02a6f2;
         float: right;
         border-radius: 100px;
@@ -216,6 +216,8 @@ export const NavigationNightModeBtn = styled.button`
         outline: none;
         overflow: hidden;
         transition: .3s;
+        user-select: none;
+        color:transparent;
 
     &:before {
         content: '';

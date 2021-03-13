@@ -18,7 +18,7 @@ const NightModeBtn = () => {
     };
 
     return <NavigationNightModeBtn onClick={toggleNightMode} className={nightMode ? "active" : ""}>
-
+        {nightMode ? "Day Mode" : "Night Mode"}
     </NavigationNightModeBtn>;
 };
 
