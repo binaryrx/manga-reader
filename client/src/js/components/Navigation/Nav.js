@@ -1,30 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable arrow-body-style */
 import React from "react";
+import { NavigationNav, NavigationNavContainer, NavigationNavItem } from "./styledComponent";
 
 const NavItem = (props) => {
     const { url, active, navName } = props;
 
     return (
-        <li className={active ? "active navigation-nav-item" : "navigation-nav-item"}>
+        <NavigationNavItem className={active ? "active" : ""}>
             <a href={url}>{navName}</a>
-        </li>
+        </NavigationNavItem>
     );
 };
 
 const Nav = () => {
     return (
-        <nav className="navigation-nav" role="navigation">
-            <ul className="navigation-nav-container">
-                <NavItem url="/" navName="Home" active />
-
+        <NavigationNav role="navigation">
+            <NavigationNavContainer>
                 <NavItem url="/latest" navName="Latest" />
-
-                <NavItem url="/browse" navName="Browse" />
-
-                <NavItem url="/search" navName="Search" />
-            </ul>
-        </nav>
+                <NavItem url="/popular" navName="popular" />
+            </NavigationNavContainer>
+        </NavigationNav>
     );
 };
 

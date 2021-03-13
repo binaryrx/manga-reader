@@ -4,6 +4,7 @@ const MangaReaderUrl = 'https://www.mangareader.net';
 
 let mangaRuns = 0;
 let chapterRuns = 0;
+
 const getDataFromMangaReader = (mangaName, chapterLink = null) => {
     if (!chapterLink) {
         return new Promise((resolve, reject) => {
@@ -12,10 +13,11 @@ const getDataFromMangaReader = (mangaName, chapterLink = null) => {
             try {
                 resolve(axios.get(`${MangaReaderUrl}/${mangaName}`));
             } catch (e) {
+                console.log("failed");
                 reject(new Error('Failed fetching Manga Data', e));
             }
         });
-    // eslint-disable-next-line no-else-return
+        // eslint-disable-next-line no-else-return
     } else {
         return new Promise((resolve, reject) => {
             chapterRuns += 1;

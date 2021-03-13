@@ -2,19 +2,19 @@
 import React from "react";
 import Logo from "./Logo";
 import Nav from "./Nav";
-import Search from "./Search";
 import UserArea from "./UserArea";
+import { NavigationStyled, NavigationContainer } from "./styledComponent";
 
 const Navigation = () => {
     return (
-        <div className="navigation-container">
-            <header className="navigation">
+        <NavigationContainer>
+            <NavigationStyled>
                 <Logo />
                 <Nav />
-                <Search />
+                {/* <Search /> */}
                 <UserArea />
-            </header>
-        </div>
+            </NavigationStyled>
+        </NavigationContainer>
     );
 };
 

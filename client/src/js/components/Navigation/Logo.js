@@ -2,12 +2,13 @@
 import React from "react";
 
 import logoImg from "../../../assets/images/logo.png";
+import { NavigationLogo } from "./styledComponent";
 
 const Logo = () => {
     return (
-        <a href="/" className="navigation-logo">
+        <NavigationLogo href="/">
             <img src={logoImg} alt="manga reader" />
-        </a>
+        </NavigationLogo>
     );
 };
 

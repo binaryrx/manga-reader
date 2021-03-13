@@ -1,30 +1,39 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable arrow-body-style */
 import React from "react";
+import {
+    MangaPreviewStyled,
+    MangaPreviewImage,
+    MangaPreviewContent,
+    MangaPreviewTitle,
+    MangaPreviewSummary,
+    MangaPreviewFooter,
+    MangaPreviewChapterNum,
+} from "./styledComponent";
 
 const MangaPreview = (props) => {
     const { mangaUrl, imgUrl, mangaName, mangaDescription, chapterUrl, mangaChapterNum, mangaUpdatedAt } = props;
 
     return (
-        <div className="manga-preview">
-            <div className="manga-preview-image">
+        <MangaPreviewStyled>
+            <MangaPreviewImage>
                 <a href={mangaUrl}>
                     <img src={imgUrl} alt="" />
                 </a>
-            </div>
-            <div className="manga-preview-text">
-                <div className="manga-preview-title">
+            </MangaPreviewImage>
+            <MangaPreviewContent>
+                <MangaPreviewTitle>
                     <a href={mangaUrl}>{mangaName}</a>
-                </div>
-                <div className="manga-preview-summary">{mangaDescription}</div>
-                <div className="manga-preview-footer">
-                    <div className="manga-preview-chapterNum">
+                </MangaPreviewTitle>
+                <MangaPreviewSummary>{mangaDescription}</MangaPreviewSummary>
+                <MangaPreviewFooter>
+                    <MangaPreviewChapterNum>
                         <a href={chapterUrl}>Ch.{mangaChapterNum}</a>
-                    </div>
+                    </MangaPreviewChapterNum>
                     <div className="manga-preview-updatedAt">{mangaUpdatedAt}</div>
-                </div>
-            </div>
-        </div>
+                </MangaPreviewFooter>
+            </MangaPreviewContent>
+        </MangaPreviewStyled>
     );
 };
 

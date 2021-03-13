@@ -1,23 +1,59 @@
 /* eslint-disable linebreak-style */
 module.exports = {
-    env: {
-        browser: true,
-        // eslint-disable-next-line linebreak-style
-        commonjs: true,
-        es2021: true
+    "ignorePatterns": ["dist", "node_modules"],
+    "rules": {
+        "max-len": [
+            "error",
+            {
+                "ignoreUrls": true,
+                "code": 120
+            }
+        ],
+        "prefer-template": "off",
+        "indent": ["error", 4],
+        "object-curly-spacing": ["error", "always"],
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 1
+            }
+        ],
+        "no-var": "error",
+        "one-var": ["error", "never"],
+        "camelcase": "error",
+        "no-multi-assign": "error",
+        "quotes": ["error", "double"],
+        "no-array-constructor": "error",
+        "no-new-object": "error",
+        "no-new-wrappers": "error",
+        "no-nested-ternary": "error",
+        "arrow-body-style": "off",
+        "no-console": [
+            "warn",
+            {
+                "allow": ["warn"]
+            }
+        ],
+        "no-template-curly-in-string": "error",
+        "no-self-compare": "error",
+        "func-names": ["error", "as-needed"],
+        "semi": [2, "always"],
+        "import/no-extraneous-dependencies": ["off", { "devDependencies": false }]
     },
-    extends: [
-        'airbnb-base'
-    ],
-    parserOptions: {
-        ecmaVersion: 12
+    "env": {
+        "browser": true,
+        "es6": true
     },
-    rules: {
-        indent: ['error', 4],
-        semi: ['error'],
-        'comma-dangle': ['error', 'never'],
-        'linebreak-style': ['error', 'windows'],
-        'max-len': ['error', 140],
-        'no-console': ['error', { allow: ['warn', 'error', 'log', 'time', 'timeEnd'] }]
-    }
+    "extends": ["eslint:recommended", "plugin:react/recommended", "airbnb-base", "prettier"],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": ["prettier"],
+    "settings": { "import/resolver": "webpack" },
 };

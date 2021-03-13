@@ -1,37 +1,29 @@
 /* eslint-disable arrow-body-style */
-import React from "react";
-import historyImg from "../../../assets/images/history.svg";
-import favoriteImg from "../../../assets/images/favorite.svg";
+import React, { useState } from "react";
+// import historyImg from "../../../assets/images/history.svg";
+// import favoriteImg from "../../../assets/images/favorite.svg";
+// import settingsImg from "../../../assets/images/settings.svg";
 import profileImg from "../../../assets/images/profile.svg";
-import settingsImg from "../../../assets/images/settings.svg";
+import SearchButton from "./SearchButton";
+import Search from "./SearchForm";
+import NightModeBtn from "./NightModeBtn";
+
+import { NavigationUser, NavigationUserProfile } from "./styledComponent";
 
 const userArea = () => {
+    const [searchOpen, setSearchOpen] = useState(false);
+
     return (
-        <div className="navigation-user">
-            <div className="navigation-user-history">
-                <a href="/history">
-                    <img src={historyImg} alt="" />
-                </a>
-            </div>
-
-            <div className="navigation-user-favorite">
-                <a href="/favorite">
-                    <img src={favoriteImg} alt="" />
-                </a>
-            </div>
-
-            <div className="navigation-user-settings">
-                <a href="/settings">
-                    <img src={settingsImg} alt="" />
-                </a>
-            </div>
-
-            <div className="navigation-user-profile">
+        <NavigationUser>
+            <NightModeBtn />
+            <NavigationUserProfile>
                 <a href="/profile">
                     <img src={profileImg} alt="" />
                 </a>
-            </div>
-        </div>
+            </NavigationUserProfile>
+            <SearchButton setSearchOpen={setSearchOpen} />
+            <Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+        </NavigationUser>
     );
 };
 

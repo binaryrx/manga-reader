@@ -199,7 +199,7 @@ module.exports = (env, argv) => {
             }),
 
             // Prettier configuration
-            new PrettierPlugin(),
+            // new PrettierPlugin(),
 
         ],
     };
