@@ -21,7 +21,11 @@
     },
     "homepage": "https://github.com/binaryrx/manga-reader#readme",
     "dependencies": {
+        "axios": "^0.21.1",
         "concurrently": "^6.0.0",
         "styled-components": "^5.2.1"
+    },
+    "devDependencies": {
+        "node-sass": "^5.0.0"
     }
 }
