@@ -5,20 +5,21 @@ const fs = require('fs')
 // const mv = require('mv');
 
 const downloadImage = require("../download-image");
+const { throws } = require('assert');
 const errorsFile = "downloadErrors.txt"
 
 
 class Chapter {
-    constructor(url, mangaName, slug, downloadPath) {
-        this.url = url;
+    constructor(options) {
+        this.url = options.url;
         this.imgBaseUrl = "https://img.mghubcdn.com/file/imghub/"
         this.graphQLURL = "https://api.mghubcdn.com/graphql";
-        this.slug = slug
-        this.mangaName = mangaName;
+        this.slugDirty = options.slugDirty
+        this.slugClean = options.slugClean;
         this.chapterName = this.getChapterName();
         this.chapterNum = this.getChapterNum()
-        this.downloadPath = downloadPath;
-        this.downloads;
+        this.downloadsDirectory = options.downloadsDirectory;
+        this.downloads = [];
     }
 
     getChapterNum() {
@@ -31,7 +32,8 @@ class Chapter {
 
     async getImagsUrls() {
         const query = JSON.stringify({
-            query: `{chapter(x:mh01,slug:"${this.slug}",number:${this.chapterNum}){id,title,mangaID,number,slug,date,pages,noAd,manga{id,title,slug,mainSlug,author,isWebtoon,isYaoi,isPorn,isSoftPorn,unauthFile,isLicensed}}}`,
+            // query: `{chapter(x:mh01,slug:"${this.slugClean}",number:${this.chapterNum}){id,title,mangaID,number,slug,date,pages,noAd,manga{id,title,slug,mainSlug,author,isWebtoon,isYaoi,isPorn,isSoftPorn,unauthFile,isLicensed}}}`,
+            query: `{chapter(x:mh01,slug:"${this.slugDirty}",number:${this.chapterNum}){id,title,mangaID,number,slug,date,pages,noAd,manga{id,title,slug,mainSlug,author,isWebtoon,isYaoi,isPorn,isSoftPorn,unauthFile,isLicensed}}}`,
             variables: {}
         });
 
@@ -48,11 +50,13 @@ class Chapter {
         const req = await Axios(config)
             .catch((err) => {
                 console.log(`Axios: Failed getImagsUrls(): Fetching ${this.chapterName} image urls ${err}`)
-                fs.appendFile(errorsFile, `${this.mangaName} ${this.chapterName} \n`, (err) => {
+                fs.appendFile(errorsFile, `${this.slugDirty} ${this.chapterName} \n`, (err) => {
                     if (err) {
                         throw err;
                     }
                 });
+
+                this.getImagsUrls();
             })
 
 
@@ -66,38 +70,40 @@ class Chapter {
         const imgUrls = await this.getImagsUrls()
 
         let count = 0;
-        let countAC = 0;
-        const downloadPaths = [];
 
         return imgUrls.reduce((accumulatorPromise, imgUrl) => {
 
-            const path = Path.resolve(this.downloadPath, `${this.mangaName}/${this.chapterName}`, `${count += 1}.jpg`)
-
             return accumulatorPromise
                 .then(() => {
+
                     const options = {
                         imgUrl,
-                        path,
-                        mangaName: this.mangaName,
+                        downloadsDirectory: this.downloadsDirectory,
+                        slugClean: this.slugClean,
                         chapterName: this.chapterName,
-                        imgNum: countAC += 1,
-                        downloadPath: this.downloadPath
+                        imgName: count += 1,
                     }
-                    // console.log(options)
-                    return downloadImage(options);
+                    return downloadImage(options, true);
                 })
                 .then((res) => {
-                    if (res) downloadPaths.push(res.path)
+                    console.log(res.message)
+                    this.downloads.push(res.path)
+                }).catch(e => {
+                    console.log(`Failed: getChapterImages(): imgUrl: ${imgUrl} ${e.code}`)
+                    fs.appendFile(errorsFile, `${this.slugClean} ${this.chapterName} ${count},`, (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
                 })
 
 
         }, Promise.resolve())
             .then(() => {
                 console.log(`Finished Downloading ${this.chapterName}!`)
-                this.downloads = downloadPaths;
-                fs.promises.appendFile(`./data/${this.mangaName}/${this.mangaName}-chapters.json`, JSON.stringify(this.downloads), 'utf8')
-                    .then(() => console.log(`Written into data/${this.mangaName}-chapters.json`))
-                    .catch((err) => console.log(`Error Writing into data/${this.mangaName}-chapters.json - ${err}`));
+                // fs.promises.appendFile(`./data/${this.slugDirty}/${this.slugDirty}-chapters.json`, JSON.stringify(this.downloads), 'utf8')
+                //     .then(() => console.log(`Written into data/${this.slugDirty}-chapters.json`))
+                //     .catch((err) => console.log(`Error Writing into data/${this.slugDirty}-chapters.json - ${err}`));
             })
             .catch(e => {
                 console.log(e)
@@ -108,29 +114,32 @@ class Chapter {
 
 
 class mangaHere {
-    constructor(url, downloadPath, completedPath) {
-        this.mangaUrl = url;
-        this.downloadPath = downloadPath;
-        this.completedPath = completedPath;
-        this.mangaName = this.getName();
-        this.slug = this.getSlug();
+    constructor(url, downloadsDirectory) {
+        this.url = url;
+        this.slugDirty = this.getPartialSlug();
+        this.slugClean = this.getSlug();
         this.chaptersUrls;
         this.chapters = [];
-    }
-
-    getName() {
-        if (this.mangaUrl.indexOf("_") != -1) {
-
-            const name = this.mangaUrl.substr(this.mangaUrl.lastIndexOf('/') + 1, this.mangaUrl.length)
-            return name.substr(0, name.indexOf('_'));
-        }
-
-        return this.mangaUrl.substr(this.mangaUrl.lastIndexOf('/') + 1)
+        this.downloadsDirectory = downloadsDirectory;
+        this.mangaDirectory = Path.resolve(this.downloadsDirectory, `${this.slugClean}`)
     }
 
     getSlug() {
-        return this.mangaUrl.substr(this.mangaUrl.lastIndexOf('/') + 1, this.mangaUrl.length)
+        if (this.url.indexOf("_") != -1) {
+            const name = this.url.substr(this.url.lastIndexOf('/') + 1, this.url.length)
+            return name.substr(0, name.indexOf('_'));
+        }
+
+        return this.url.substr(this.url.lastIndexOf('/') + 1)
     }
+
+    getPartialSlug() {
+        return this.url.substr(this.url.lastIndexOf('/') + 1, this.url.length)
+    }
+
+    // getName() {
+    //     return this.slugDirty.split('-').join(" ");
+    // }
 
     getMangaInfo() {
         const info = this.$('h1+div').children().map((i, el) => {
@@ -138,46 +147,65 @@ class mangaHere {
                 const last = this.$(el).children().last().text()
                 return last
             }
-
-
         }).get()
 
-        const genere = this.$('h1+div').children().map((i, el) => {
+        const genre = this.$('h1+div').children().map((i, el) => {
             if (i == 4) {
                 return this.$(el).children().children().map((i, el) => {
                     return this.$(el).text();
                 }).get()
             }
         }).get()
+
+        const altName = this.$("h1 small").text();
+        const title = this.$("h1").children().remove().end().text();
         const summary = this.$('.tab-content p').text();
+        const posterUrl = this.$('.container-fluid .row div img.manga-thumb').attr('src');
 
-        const scheme = ["author", "artist", "status", "latest", "genre", "summary"]
+        this.mangaName = title;
+        this.posterUrl = posterUrl;
+        this.altName = altName;
+        this.summary = summary;
+        this.genre = genre;
 
-        return this.info = scheme.reduce((acc, current, i) => {
-            if (i === 4) {
-                acc[current] = genere
-            } else if (i === 5) {
-                acc[current] = summary
-            } else {
-                acc[current] = info[i]
-            }
-            return acc;
-        }, {})
+        const scheme = ["author", "artist", "status", "latest"]
 
+        scheme.forEach((val, i) => {
+            this[val] = info[i];
+        })
 
+        return this;
+    }
+
+    async getMangaPoster() {
+
+        const imgName = `${this.slugClean}`;
+        const imgUrl = this.posterUrl;
+        console.log(this.slugClean)
+
+        const options = {
+            imgUrl,
+            downloadsDirectory: this.downloadsDirectory,
+            slugClean: this.slugClean,
+            chapterName: null,
+            imgName,
+        }
+        // console.log(options)
+        return await downloadImage(options)
+            .then((data) => this.posterPath = data.path)
     }
 
     async getPageData() {
         const req = await Axios({
-            url: this.mangaUrl,
+            url: this.url,
             method: 'GET',
             headers: {
                 Cookie: `__cfduid=d3762523f8b2b398a3faba5f5558aa58b1615568730; ads||exoclick-sticky={"count":1,"lastTime":1615568762203}; splashWeb-4079724-42=1; nb-no-req-4079724=true; recently={"1615568762064":{"mangaID":20671,"number":261},"1615568882534":{"mangaID":20,"number":1}}; id_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2Y0OTQwLTgzNTUtMTFlYi1iYzMxLWRmZjI0ODdmMDhmNSIsImRpc3BsYXlOYW1lIjoiQmluYXJ5UngiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDUuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1XY0NPNS1jRVNYVS9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNrZGRfendtQy16Q1Fkd2dMZFhFUFRmaXBITHJRL3M5Ni1jL3Bob3RvLmpwZz9zej0xNjAiLCJlbWFpbCI6ImJpbmFyeXJ4QGdtYWlsLmNvbSIsImlhdCI6MTYxNTU2ODkxMywiZXhwIjoxNjQ3MTA0OTEzfQ.M0vm3jrTEVUpzECUEE4h1TQ3Oi7l2Jh-EZ5IULk_55U`
             }
         })
             .catch((err) => {
-                console.log(`Axios: Failed getPageData(): mangaUrl: ${this.url} ${err.code}`)
-                fs.appendFile(errorsFile, `${this.mangaName} ${this.chapterName} \n`, (err) => {
+                console.log(`Axios: Failed getPageData(): url: ${this.url} ${err.code}`)
+                fs.appendFile(errorsFile, `${this.slugDirty} ${this.chapterName} \n`, (err) => {
                     if (err) {
                         throw err;
                     }
@@ -191,7 +219,12 @@ class mangaHere {
 
     async getChaptersUrls() {
         return this.$('.list-group-item a').map((i, el) => {
-            this.chapters.push(new Chapter(this.$(el).attr('href'), this.mangaName, this.slug, this.downloadPath))
+            this.chapters.push(new Chapter({
+                url: this.$(el).attr('href'),
+                slugDirty: this.slugDirty,
+                slugClean: this.slugClean,
+                downloadsDirectory: this.downloadsDirectory,
+            }))
             return this.$(el).attr('href');
         }).get();
     }
@@ -201,41 +234,36 @@ class mangaHere {
         let result = this.chapters.reverse().reduce((accumulatorPromise, imgUrl) => {
             return accumulatorPromise.then(async () => {
                 return this.chapters[count].getChapterImages(count += 1)
-            });
+            })
+
 
         }, Promise.resolve());
 
-        result.then(async () => {
-            console.log(`Finished Downloading ${this.mangaName} Chapters!`);
-
-            // const path = Path.resolve(__dirname, `../data/images/${this.mangaName}`)
-
-            // mv(path, this.completedPath, (err) => {
-            //     if (err) throw err
-            //     console.log(`moved ${this.mangaName} chapters to ${this.completedPath}`)
-            // })
-
-            // fs.promises.writeFile(`./data/${this.mangaName}/${this.mangaName}.json`, JSON.stringify(this.info), 'utf8')
-            //     .then(() => console.log(`Written into data/${this.mangaName}.json`))
-            //     .catch((err) => console.log(`Error Writing into data/${this.mangaName}.json - ${err}`));
+        return result.then(async () => {
+            console.log(`Finished Downloading ${this.slugDirty} Chapters!`);
         });
     }
 
 
     async init() {
-        await this.getPageData()
-        await this.getChaptersUrls();
-        await this.getMangaInfo()
-        if (!fs.existsSync(`./data/${this.mangaName}`)) {
-            fs.mkdirSync(`./data/${this.mangaName}`);
+        console.log(this.mangaDirectory)
+        if (!fs.existsSync(this.mangaDirectory)) {
+            fs.mkdirSync(this.mangaDirectory);
         }
 
-        fs.promises.writeFile(`./data/${this.mangaName}/${this.mangaName}.json`, JSON.stringify(this.info), 'utf8')
-            .then(() => console.log(`Written into data/${this.mangaName}.json`))
-            .catch((err) => console.log(`Error Writing into data/${this.mangaName}/${this.mangaName}.json - ${err}`));
+        await this.getPageData();
+        await this.getChaptersUrls();
+        await this.getMangaInfo();
+        await this.getMangaPoster();
 
-        await this.downloadChapters()
 
+        // if (!fs.existsSync(`./data/${this.slugDirty}`)) {
+        //     fs.mkdirSync(`./data/${this.slugDirty}`);
+        // }
+
+        // fs.promises.writeFile(`./data/${this.slugDirty}/${this.slugDirty}.json`, JSON.stringify(this.info), 'utf8')
+        //     .then(() => console.log(`Written into data/${this.slugDirty}.json`))
+        //     .catch((err) => console.log(`Error Writing into data/${this.slugDirty}/${this.slugDirty}.json - ${err}`));
 
     };
 

@@ -1,25 +1,41 @@
 const fs = require('fs')
-const request = require('request')
 const Path = require('path')
 const Axios = require('axios')
 const errorsFile = "downloadErrors.txt"
 
 
-module.exports = async function downloadImage(options) {
-    const { imgUrl, path, mangaName, chapterName, imgNum, downloadPath } = options
+module.exports = async function downloadImage(options, isChapter = false) {
+    const { imgUrl, downloadsDirectory, slugClean, chapterName, imgName } = options
+    let fullDownloadPath = "";
 
-    const dPath = Path.resolve(downloadPath);
-    const dirName = Path.resolve(dPath, mangaName);
-    const dirChapter = `${dPath}/${mangaName}/${chapterName}`;
+    fullDownloadPath = Path.resolve(downloadsDirectory, `${slugClean}`);
+
+    if (isChapter) {
+        fullDownloadPath = Path.resolve(fullDownloadPath, `${chapterName}`);
+    }
+    fullDownloadPath = Path.resolve(fullDownloadPath, `${imgName}.jpg`);
+
+    console.log()
 
 
-    if (!fs.existsSync(dirName)) {
-        fs.mkdirSync(dirName);
+    const chapterDirectory = Path.resolve(downloadsDirectory, `${slugClean}/${chapterName}`);
+
+    if (isChapter && !fs.existsSync(chapterDirectory)) {
+        fs.mkdirSync(chapterDirectory)
     }
 
-    if (!fs.existsSync(dirChapter)) {
-        fs.mkdirSync(dirChapter);
+    if (fs.existsSync(fullDownloadPath)) {
+        return new Promise((resolve, reject) => {
+            resolve({
+                status: "done",
+                message: `image already exists: ${fullDownloadPath}`,
+                downloadedFrom: imgUrl,
+                downloadDirectory: fullDownloadPath,
+                path: fullDownloadPath.substr(fullDownloadPath.indexOf("\\m\\"), fullDownloadPath.length).replace(/\\/g, "/")
+            })
+        })
     }
+
 
     const req = await Axios({
         url: imgUrl,
@@ -28,7 +44,7 @@ module.exports = async function downloadImage(options) {
     })
         .catch((err) => {
             console.log(`Axios: Failed Fetching ${chapterName} ${err.code}`)
-            fs.appendFile(errorsFile, `${mangaName} ${chapterName} ${imgNum},`, (err) => {
+            fs.appendFile(errorsFile, `${slugClean} ${chapterName} ${imgName},`, (err) => {
                 if (err) {
                     throw err;
                 }
@@ -36,28 +52,29 @@ module.exports = async function downloadImage(options) {
         })
 
 
+
     if (req && req.data && req.data.statusCode === 200) {
 
-        const writer = await req.data.pipe(fs.createWriteStream(path));
-
-        // if (!fs.existsSync(path)) {
+        const writer = await req.data.pipe(fs.createWriteStream(fullDownloadPath));
 
         return new Promise((resolve, reject) => {
 
-            writer.on('end', resolve({
-                message: `finished downloading ${mangaName} ${chapterName} ${imgNum} img`,
-                url: imgUrl,
-                path: path.substr(path.indexOf("\\data"), path.length)
-            }));
+            writer.on('end', resolve((() => {
+
+                return {
+                    message: `finished downloading: ${slugClean} ${chapterName ? chapterName : ""} ${imgName} img`,
+                    status: "done",
+                    downloadedFrom: imgUrl,
+                    downloadDirectory: fullDownloadPath,
+                    path: fullDownloadPath.substr(fullDownloadPath.indexOf("\\m\\"), fullDownloadPath.length).replace(/\\/g, "/")
+                }
+            })()
+
+            ));
 
             writer.on('error', reject)
         })
-            .then(console.log.bind(console, `downloaded: ${mangaName} ${chapterName} ${imgNum}`))
-
-
-        // } else {
-        //     return new Promise((resolve, reject) => resolve())
-        // }
+        // .then(console.log.bind(console, `downloaded: ${slugClean} ${chapterName ? chapterName : ""} ${imgName}.jpg`))
 
     }
 
