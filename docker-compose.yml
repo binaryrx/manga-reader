@@ -1,0 +1,95 @@
+version: '3.1'
+
+services:
+
+    mangas-crawler-service: 
+      build: "./mangas-crawler-service"
+      depends_on:
+        - mangas-crawler-service-db
+        - api-gateway
+      ports:
+        - 7999:7999
+      volumes:
+        - "./mangas-crawler-service:/opt/app"
+
+    mangas-crawler-service-db:
+      image: postgres
+      environment:
+          POSTGRES_USER: ${CRAWLER_POSTGRES_USER}
+          POSTGRES_PASSWORD: ${CRAWLER_POSTGRES_PASSWORD}
+          POSTGRES_DB: ${CRAWLER_POSTGRES_DB}
+      ports:
+          - 5499:5499
+
+    api-gateway:
+      build: "./api-gateway"
+      depends_on:
+        - mangas-service
+      ports:
+        - 7001:7001
+      volumes:
+        - "./api-gateway:/opt/app"
+
+    mangas-service:
+      build: "./mangas-service"
+      depends_on:
+        - mangas-service-db
+      ports:
+        - 7100:7100
+      volumes:
+        - "./mangas-service:/opt/app"
+
+    mangas-service-db:
+        image: postgres
+        environment:
+            POSTGRES_USER: ${MANGAS_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${MANGAS_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${MANGAS_POSTGRES_DB}
+        ports:
+            - 5432:5432
+
+    chapters-service:
+      build: "./chapters-service"
+      depends_on:
+        - mangas-service
+        - chapters-service-db
+      ports:
+        - 7101:7101
+      volumes:
+        - "./chapters-service:/opt/app"
+
+    chapters-service-db:
+        image: postgres
+        environment:
+            POSTGRES_USER: ${CHAPTERS_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${CHAPTERS_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${CHAPTERS_POSTGRES_DB}
+        ports:
+            - 5431:5431
+
+    users-service:
+      build: "./users-service"
+      depends_on:
+        - users-service-db
+      ports:
+        - 7102:7102
+      volumes:
+        - "./users-service:/opt/app"
+        - "/opt/app/node_modules"
+
+    users-service-db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: ${USERS_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${USERS_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${USERS_POSTGRES_DB}
+        ports:
+            - 5430:5430
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+

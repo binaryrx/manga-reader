@@ -1,0 +1,29 @@
+{
+  "name": "chapters-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "babel-watch -L src/index.js",
+    "migrate": "npx knex migrate:latest",
+    "rollback": "npx knex migrate:rollback",
+    "seed": "npx knex seed:run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.13.10",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.95.2",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "babel-watch": "^7.4.1"
+  }
+}

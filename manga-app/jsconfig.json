@@ -1,0 +1,17 @@
+{
+    "compilerOptions" : {
+        "baseUrl" : ".",
+        "paths": {
+            "#/components": ["components"],
+            "#/components/*": ["components/*"],
+            "#/theme/*": ["theme/*"],
+            "#/constants/*": ["constants/*"],
+            "#/utils/*": ["utils/*"],
+            "#/assets/*": ["assets/*"],
+            "#/api/*": ["api/*"],
+            "#/lib/*": ["lib/*"],
+            "#/redux": ["redux"],
+            "#/redux/*": ["redux/*"],
+        }
+    }
+}

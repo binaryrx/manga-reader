@@ -1,0 +1,19 @@
+{
+  "name": "manga-reader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:services": " docker-compose up",
+    "start:client": "cd ./manga-app && npm run dev",
+    "start": "concurrently \"npm run start-services\" \"npm run start-client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
+    "concurrently": "^6.4.0"
+  }
+}

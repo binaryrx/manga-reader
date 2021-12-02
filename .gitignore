@@ -1,0 +1,12 @@
+.DS_STORE
+node_modules
+.env
+
+mangas/
+
+dist/
+.sass-cache
+*.mp4
+MAT/
+
+imgHub/
