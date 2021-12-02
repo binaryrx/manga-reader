@@ -1,50 +1,61 @@
 import Head from 'next/head'
-import { useMutation } from "@apollo/client";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { getSession, clearSession } from "#/redux/slices/sessionSlice";
-import { Layout } from "#/components"
+import { requireAuth } from "#/lib/requireAuth";
+import { getSession } from "#/redux/slices/sessionSlice";
+import { Layout, Logout } from "#/components"
 
-import DELETE_USER_SESSION from '#/api/mutations/DELETE_USER_SESSION'
+
+
 
 export default function Profile() {
-    const dispatch = useDispatch();
-    const [deleteUserSession] = useMutation(DELETE_USER_SESSION);
+	const session = useSelector(getSession);
 
-    const session = useSelector(getSession);
+	return (
+		<div>
+			<Head>
+				<title>Manga Reader</title>
+				<meta name="description" content="Manga Reader" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 
-    return (
-      <div>
-        <Head>
-          <title>Manga Reader</title>
-          <meta name="description" content="Manga Reader" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+			{ session && session.user &&
+				<Layout>
+					<main>
+						profile
+						<div>
+							logged in as {session.user.email} 
+							<Logout/>
+						</div>
+					</main>
 
-        { session && session.user && 
-        <Layout>
-            <main>
-            profile
-            </main>
+				
 
-            <div>
-                logged in as {session.user.email}
+					<footer>
 
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(clearSession)
-                    deleteUserSession({variables: {session_id: session.id}})
-                }}>logOut</button>
-            </div>
+					</footer>
+				</Layout>
+			}
 
-            <footer>
-            
-            </footer>
-        </Layout>
-        }
-  
-        
-      </div>
-    )
-  }
-  
+
+		</div>
+	)
+}
+
+export const getServerSideProps = requireAuth(context => {
+
+	// // console.log(req,res)
+	// const session = req?.cookies?.userSessionId;
+
+	// if(session){
+	// 	res.statusCode = 302;
+	// 	res.setHeader
+	// }
+	// console.log(req.cookies)
+
+	return {
+		props: {
+			
+		}
+	}
+})

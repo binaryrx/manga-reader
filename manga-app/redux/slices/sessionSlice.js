@@ -17,11 +17,12 @@ export const sessionSlice = createSlice({
             state.user.id = action.payload.user.id
             state.user.email = action.payload.user.email
         },
-        clearSession: ( state ) => {
-            state.id = null,
-            state.user.id = null,
-            state.user.email = null
-        }
+        clearSession: () => initialState
+        // clearSession: ( state ) => {
+        //     state.id = null,
+        //     state.user.id = null,
+        //     state.user.email = null
+        // }
     }
 });
 

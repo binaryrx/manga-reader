@@ -6,7 +6,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { ThemeProvider } from 'next-themes';
 
-import { Navigation } from "#/components/";
+import { RouteGuard, Navigation  } from "#/components/";
 import { store } from "#/redux/store";
 import { setSession } from "#/redux/slices/sessionSlice";
 import { useApollo } from "#/api/apollo";
@@ -45,16 +45,16 @@ function MangaReader({ Component, pageProps, router }) {
 	return (
 		<StrictMode>
 			<Provider store={store}>
-				{/* <AuthProvider pageProps={pageProps}> */}
 				<ApolloProvider client={apolloClient}>
 					<ThemeProvider defaultTheme="dark">
 						<GlobalStyle />
 							<Navigation />
 							<AnimatePresence exitBeforeEnter initial="initial" onExitComplete={() => window.scrollTo(0, 0)}>
-								{loaded && <Component {...pageProps} canonical={url} key={url} />}
+								{/* <RouteGuard> */}
+									{loaded && <Component {...pageProps} canonical={url} key={url} />}
+								{/* </RouteGuard> */}
 							</AnimatePresence>
 					</ThemeProvider>
-				{/* </AuthProvider> */}
 				</ApolloProvider>
 			</Provider>
 		</StrictMode>
