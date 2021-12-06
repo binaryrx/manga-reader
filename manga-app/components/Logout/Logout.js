@@ -13,6 +13,8 @@ const Logout = () => {
     const dispatch = useDispatch();
     const session = useSelector(getSession);
 
+    console.log(router.pathname)
+
     const [deleteUserSession] = useMutation(DELETE_USER_SESSION);
 
     return (
@@ -20,7 +22,7 @@ const Logout = () => {
             e.preventDefault();
             dispatch(clearSession())
             deleteUserSession({ variables: { session_id: session.id } })
-            router.push("/login");
+            router.push(`/login?returnUrl=${encodeURIComponent(router.pathname)}`);
         }}>logOut</button>
     );
 };

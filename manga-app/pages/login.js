@@ -23,9 +23,12 @@ export default function LoginPage() {
 
 			<Layout>
 				<main>
-					{/* {session.id && <div>your already logged in, redirecting</div>} */}
-					{!session.id && <Login />}
-					<div>login page</div>
+					{!session.id && 
+						<>
+							<Login />
+							<div>login page</div>
+						</>
+					}
 				</main>
 
 				<footer>

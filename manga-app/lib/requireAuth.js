@@ -1,15 +1,12 @@
 export function requireAuth(gssp) {
     return async (context) => {
-        const { req, res, query } = context
+        const { req, resolvedUrl } = context
         const session = req?.cookies?.userSessionId;
-
-        console.log(session)
-        console.log("query:",query)
 
         if(!session) {
             return {
                 redirect: {
-                    destination: "/login",
+                    destination: `/login?returnUrl=${encodeURIComponent(resolvedUrl)}`,
                     statusCode: 302,
                 }
             }

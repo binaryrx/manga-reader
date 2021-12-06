@@ -19,14 +19,16 @@ export default function Profile() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			{ session && session.user &&
+			
 				<Layout>
 					<main>
-						profile
-						<div>
-							logged in as {session.user.email} 
-							<Logout/>
-						</div>
+						{ session?.user?.email && 
+							<div>
+								logged in as {session.user.email} 
+								<Logout/>
+							</div>
+						}
+
 					</main>
 
 				
@@ -35,7 +37,6 @@ export default function Profile() {
 
 					</footer>
 				</Layout>
-			}
 
 
 		</div>

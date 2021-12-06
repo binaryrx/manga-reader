@@ -16,6 +16,7 @@ import GlobalStyle from "#/theme/GlobalStyle";
 function MangaReader({ Component, pageProps, router }) {
 	const dispatch = useDispatch();
 	const [ loaded, setLoaded ] = useState(false);
+	const [ error, setError ] = useState(null);
 
   	const url = `https://stg.sh/${router.route}`;
 	const apolloClient = useApollo(pageProps);
@@ -31,12 +32,16 @@ function MangaReader({ Component, pageProps, router }) {
 			}
 		});
 
-		apolloClient.query({query: GET_USER_SESSION}).then(({data: userData}) => {
-			if(userData && userData.userSession) {
-				dispatch(setSession(userData.userSession))
-			}
-			setLoaded(true)
-		})
+		apolloClient.query({query: GET_USER_SESSION})
+			.then(({data: userData}) => {
+				if(userData && userData.userSession) {
+					dispatch(setSession(userData.userSession))
+				}
+				setLoaded(true)
+			})
+			.catch( (e) => {
+				setError("An error has occoured, please try again later.")
+			})
 
 	}, []);
 
@@ -51,6 +56,7 @@ function MangaReader({ Component, pageProps, router }) {
 							<Navigation />
 							<AnimatePresence exitBeforeEnter initial="initial" onExitComplete={() => window.scrollTo(0, 0)}>
 								{/* <RouteGuard> */}
+									{error && <div>{error}</div>}
 									{loaded && <Component {...pageProps} canonical={url} key={url} />}
 								{/* </RouteGuard> */}
 							</AnimatePresence>

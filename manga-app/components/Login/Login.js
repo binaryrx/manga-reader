@@ -32,11 +32,8 @@ const Login = () => {
                 }
 
                 if(data) {
-                    console.log("dfgfdgfd")
-                    console.log(router.query)
                     dispatch(setSession(data?.createUserSession))
                     const returnUrl = router.query.returnUrl || "/";
-                    console.log(returnUrl)
                     router.push(returnUrl)
                 }
             })
