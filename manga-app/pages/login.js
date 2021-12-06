@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router'
 
-import { Layout, Login } from "#/components"
+import { Layout, Container, Login } from "#/components"
 import { useSelector } from 'react-redux';
 import { getSession } from "#/redux/slices/sessionSlice";
 
@@ -19,22 +19,16 @@ export default function LoginPage() {
 
 
 	return (
-		<div>
+		<Layout>
+			{!session.id && 
+				<Container>
+					<Login />
+				</Container>
+			}
 
-			<Layout>
-				<main>
-					{!session.id && 
-						<>
-							<Login />
-							<div>login page</div>
-						</>
-					}
-				</main>
+			<footer>
 
-				<footer>
-
-				</footer>
-			</Layout>
-		</div>
+			</footer>
+		</Layout>
 	)
 }

@@ -10,14 +10,7 @@ const variants = {
 
 const Layout = ({children}) => {
     return (
-
-        <StyledLayout
-            initial="hidden"
-            animate="enter"
-            exit="exit"
-            variants={variants}
-            transition={{type: "linear"  }}
-        >
+        <StyledLayout initial="hidden" animate="enter" exit="exit" variants={variants} transition={{type: "linear"  }}>
             {children}
         </StyledLayout>
     );

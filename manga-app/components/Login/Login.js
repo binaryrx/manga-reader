@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,8 @@ import * as Yup from "yup";
 
 import CREATE_USER_SESSION from '#/api/mutations/CREATE_USER_SESSION'
 import { setSession } from "#/redux/slices/sessionSlice";
+
+import { Form } from "./styled";
 
 
 const Login = () => {
@@ -22,7 +24,7 @@ const Login = () => {
 
     const formOptions = { resolver: yupResolver(validationSchema)};
     
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors } } = useForm(formOptions);
+    const { register, handleSubmit, setError, setFocus , formState: { isSubmitting, errors } } = useForm(formOptions);
 
     const onSubmit = ({email, password}) => {
         return createUserSession({variables: { email, password }})
@@ -42,43 +44,55 @@ const Login = () => {
             })
     }
 
+    useEffect( () => {
+        setFocus("email")
+    },[setFocus])
 
-    // const onSubmit = handleSubmit(async ({ email, password }) => {
+    const [typed, setTyped ] = useState({email: false, password: false});
 
-    //     console.log("submited");
 
-    //     const { data, errors } = await createUserSession({ variables: { email, password } });
+    const setTypedState = (e, label) => {
+        if(e.target.value.length > 0) {
+            setTyped({...typed, [label]: true})
+        }else{
+            setTyped({...typed, [label]: false})
+        }
 
-    //     if(errors) {
-    //         return setLoginError(errors)
-    //     }
+        
+    }
+    console.log(typed)
 
-    //     if(data && loginError) {
-    //         setLoginError(null)
-    //     }
-
-    //     if(data){
-    //         console.log(data)
-    //         dispatch(setSession(data?.createUserSession))
-    //     }
-
-       
-    // });
-    
-
-    return <form onSubmit={handleSubmit(onSubmit)}>
-        <label>
-            Email
-            <input disabled={isSubmitting} name="email" type="email" {...register("email")} className={`${errors.email ? "error" : ""}`}/>
-            <span className="error">{errors.email?.message}</span>
-        </label>
-        <label>
-            Password
-            <input disabled={isSubmitting} name="password" type="password" {...register("password")} className={`${errors.password ? "error" : ""}`}/>
-            <span className="error">{errors.password?.message}</span>
-        </label>
+    return <Form onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-container">
+            <input 
+                disabled={isSubmitting} 
+                name="email" 
+                {...register("email", { onChange: e =>  setTypedState(e, "email") })}
+                aria-invalid={errors.email ? "true" : "false"} 
+                className={`${errors.email ? "error" : ""} ${typed.email ? "typed" : ""}`}
+            />
+            <label htmlFor="email">Email</label>
+            <span className="error" role="alert">{errors.email?.message}</span>
+        </div>
+        <div className="input-container">
+            <input disabled={isSubmitting}
+                name="password"
+                type="password"
+                {...register("password", { onChange: e => setTypedState(e, "password") })}
+                aria-invalid={errors.password ? "true" : "false"} 
+                className={`${errors.password ? "error" : ""} ${typed.password ? "typed" : ""}`}
+            />
+            <label htmlFor="password">Password</label>
+            <span className="error" role="alert">{errors.password?.message}</span>
+        </div>
         <input type="submit" disabled={isSubmitting} name="submit" />
+
+
+        <div className="links">
+            <div className="link">forgot your password?</div>
+            <div className="link">sign up</div>
+        </div>
         {errors.apiError && <div>{errors.apiError?.message}</div>}
-    </form>;
+    </Form>;
 };
 export default Login;
