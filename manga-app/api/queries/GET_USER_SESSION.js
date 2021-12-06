@@ -7,6 +7,7 @@ const GET_USER_SESSION = gql`
             user{
                 email
                 id
+                name
             }
         }
     }

@@ -10,6 +10,7 @@ import { Layout, Logout } from "#/components"
 
 export default function Profile() {
 	const session = useSelector(getSession);
+	console.log(session)
 
 	return (
 		<div>
@@ -22,9 +23,9 @@ export default function Profile() {
 			
 				<Layout>
 					<main>
-						{ session?.user?.email && 
+						{ session?.user?.name && 
 							<div>
-								logged in as {session.user.email} 
+								logged in as {session.user.name} 
 								<Logout/>
 							</div>
 						}

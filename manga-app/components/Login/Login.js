@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from "yup";
+import Link from "next/link";
 
 import CREATE_USER_SESSION from '#/api/mutations/CREATE_USER_SESSION'
 import { setSession } from "#/redux/slices/sessionSlice";
@@ -85,12 +86,12 @@ const Login = () => {
             <label htmlFor="password">Password</label>
             <span className="error" role="alert">{errors.password?.message}</span>
         </div>
-        <input type="submit" disabled={isSubmitting} name="submit" />
+        <input type="submit" disabled={isSubmitting} name="submit" value="Sign in"/>
 
 
         <div className="links">
-            <div className="link">forgot your password?</div>
-            <div className="link">sign up</div>
+            <Link href="/reset-password">forgot your password?</Link>
+            <Link href="/signup">Sign up</Link>
         </div>
         {errors.apiError && <div>{errors.apiError?.message}</div>}
     </Form>;

@@ -35,6 +35,7 @@ function MangaReader({ Component, pageProps, router }) {
 		apolloClient.query({query: GET_USER_SESSION})
 			.then(({data: userData}) => {
 				if(userData && userData.userSession) {
+					console.log(userData.userSession)
 					dispatch(setSession(userData.userSession))
 				}
 				setLoaded(true)

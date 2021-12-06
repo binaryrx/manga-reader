@@ -4,6 +4,11 @@ export const Form = styled.form`
     display:flex;
     flex-flow: column nowrap;
     justify-content: flex-end;
+
+    .apiError{
+        margin-bottom: 1.5rem;
+        color: red;
+    }
     
     .input-container{
         position: relative;
@@ -26,11 +31,10 @@ export const Form = styled.form`
     input{
         padding: 0;
         margin:0;
-        min-width: 15rem;
+        min-width: 24rem;
         min-height: 3rem;
         padding-left: 1rem;
         font-size: inherit;
-     
         &:not([type="submit"]) {
             border: 1px solid white;
             border-radius: 3px;
@@ -39,7 +43,6 @@ export const Form = styled.form`
                 color:red;
             }
        }
-       
        &:focus ~ label,&:not(:focus).typed ~ label {
            top: -1rem;
            left: 0.3rem;

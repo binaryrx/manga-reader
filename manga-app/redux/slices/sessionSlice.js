@@ -4,7 +4,8 @@ const initialState = {
     id: null,
     user: {
         id: null,
-        email: null
+        email: null,
+        name: null
     },
 };
 
@@ -16,13 +17,10 @@ export const sessionSlice = createSlice({
             state.id = action.payload.id;
             state.user.id = action.payload.user.id
             state.user.email = action.payload.user.email
+            state.user.name = action.payload.user.name
         },
         clearSession: () => initialState
-        // clearSession: ( state ) => {
-        //     state.id = null,
-        //     state.user.id = null,
-        //     state.user.email = null
-        // }
+       
     }
 });
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router'
 
-import { Layout, Container, Login } from "#/components"
+import { Layout, Container, Signup } from "#/components"
 import { useSelector } from 'react-redux';
 import { getSession } from "#/redux/slices/sessionSlice";
 
@@ -10,19 +10,17 @@ export default function LoginPage() {
 	const session = useSelector(getSession);
 
 	useEffect(() => {
-		// redirect to home if already logged in
+		// redirect to profile if already logged in
 		if (session.id) {
-			router.push("/");
+			router.push("/profile");
 		}
 
 	}, [])
 
-
 	return (
 		<Layout>
-			
 			<Container>
-				<Login />
+				<Signup />
 			</Container>
 
 			<footer>
