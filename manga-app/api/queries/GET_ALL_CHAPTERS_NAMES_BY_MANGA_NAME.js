@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const GET_ALL_CHAPTERS_NAMES_BY_NAME = gql`
+const GET_ALL_CHAPTERS_NAMES_BY_MANGA_NAME = gql`
   query chaptersUrlsByName($mangaName: String!) {
     chaptersUrlsByName( contains: $mangaName) {
         chapter_name
@@ -9,4 +9,4 @@ const GET_ALL_CHAPTERS_NAMES_BY_NAME = gql`
   }
 `;
 
-export default GET_ALL_CHAPTERS_NAMES_BY_NAME;
+export default GET_ALL_CHAPTERS_NAMES_BY_MANGA_NAME;

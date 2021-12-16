@@ -1,8 +1,9 @@
 import gql from "graphql-tag";
 
-const GET_MANGAS_BY_GENRE = gql`
-    query mangasByGenre($manga_name: String!) {
-        mangasByGenre(contains: $manga_name) {
+const GET_MANGAS_BY_IDS = gql`
+    query mangasByIds($mangas_ids: [Int!]!) {
+        mangasByIds(mangas_ids: $mangas_ids) {
+            id
             manga_name
             status
             author
@@ -14,4 +15,4 @@ const GET_MANGAS_BY_GENRE = gql`
         }
     }
 `;
-export default GET_MANGAS_BY_GENRE;
+export default GET_MANGAS_BY_IDS;

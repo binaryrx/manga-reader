@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import heartImg from "#/assets/images/heart.svg";
+
+import Favorite from "#/components/Favorite";
+
 import arrowRightImg from "#/assets/images/arrow-right.svg";
 import arrowUpImg from "#/assets/images/arrow-up.svg";
 import upImg from "#/assets/images/up.svg";
 import { mqSm, mqMd, mqLg } from "#/theme/styleVars";
-
 
 import {
     ChapterMain,
@@ -19,9 +20,8 @@ import {
 } from "./styled";
 import slugify from "#/utils/slugify";
 
-
 const Chapter = ({ chapter, chapters } = props) => {
-
+    
     const host = "http://imghub.stg.sh";
 
     const [selectOpen, setSelectOpen] = useState(false);
@@ -57,7 +57,6 @@ const Chapter = ({ chapter, chapters } = props) => {
     const nextChapterUrl = getPrevNextUrl(nextChapter, chapter.manga_name);
     const prevChapterUrl = getPrevNextUrl(prevChapter, chapter.manga_name);
 
-
     return (
         <>
             {chapter && <ChapterMain >
@@ -79,9 +78,7 @@ const Chapter = ({ chapter, chapters } = props) => {
 
                 <ChapterNav>
 
-                    <button className="favorite">
-                        <img src={heartImg.src} alt="" />
-                    </button>
+                    <Favorite manga_id={Number(chapter.manga_id)}/>
 
                     <ul className={`pagination ${selectOpen ? "open" : ""}`} >
                         <li>
@@ -92,7 +89,6 @@ const Chapter = ({ chapter, chapters } = props) => {
                                 </a>
                             </Link>
                         </li>
-
 
                         <li >
                             <button className="select-open" id="select-chapter" onClick={() => setSelectOpen(!selectOpen)} role="button" aria-haspopup="true" aria-expanded="false">

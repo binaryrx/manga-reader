@@ -13,11 +13,11 @@ export const sessionSlice = createSlice({
     name: "session",
     initialState,
     reducers: {
-        setSession: ( state, action ) => {
-            state.id = action.payload.id;
-            state.user.id = action.payload.user.id
-            state.user.email = action.payload.user.email
-            state.user.name = action.payload.user.name
+        setSession: ( state, { payload } ) => {
+            state.id = payload.id;
+            state.user.id = payload.user.id
+            state.user.email = payload.user.email
+            state.user.name = payload.user.name
         },
         clearSession: () => initialState
        

@@ -11,7 +11,7 @@ const GET_MANGA_BY_TITLE = gql`
         artist
         description,
         genres,
-        latestChapter,
+        latest_chapter,
         updated_at
         chapters{
             id

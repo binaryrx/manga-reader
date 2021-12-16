@@ -18,4 +18,9 @@ export default class MangaService {
         const { data } = await Axios.get(`${MANGA_SERVICE_URI}/genre/${genre}`)
         return data
     }
+
+    static async fetchMangasByIds({mangas_ids}) {
+        const { data } = await Axios.get(`${MANGA_SERVICE_URI}/mangas/${mangas_ids.toString()}`)
+        return data
+    }
 }

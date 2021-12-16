@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useMutation } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
@@ -8,15 +8,22 @@ import * as Yup from "yup";
 import Link from "next/link";
 
 import CREATE_USER_SESSION from '#/api/mutations/CREATE_USER_SESSION'
-import { setSession } from "#/redux/slices/sessionSlice";
+import GET_USER_FAVORITES from "#/api/queries/GET_USER_FAVORITES";
+import { setSession, getSession } from "#/redux/slices/sessionSlice";
 
 import { Form } from "./styled";
+import { useSelector } from "react-redux";
+import { setFavorites } from "#/redux/slices/favoritesSlice";
 
 
 const Login = () => {
-    const dispatch = useDispatch();
     const router = useRouter();
+    const dispatch = useDispatch();
+    const session = useSelector(getSession);
+
     const [createUserSession] = useMutation(CREATE_USER_SESSION, { errorPolicy: "all" });
+    const [getFavorites ,{data: favorites, error: favoriteError, loading: favoriteLoading}] = useLazyQuery(GET_USER_FAVORITES);
+
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().required("Email is required"),
@@ -27,43 +34,58 @@ const Login = () => {
     
     const { register, handleSubmit, setError, setFocus , formState: { isSubmitting, errors } } = useForm(formOptions);
 
-    const onSubmit = ({email, password}) => {
-        return createUserSession({variables: { email, password }})
-            .then(({data,errors}) => {
-                if(errors) {
-                    setError("apiError", {message: errors})
-                }
+    const onSubmit = async ({email, password}) => {
 
-                if(data) {
-                    dispatch(setSession(data?.createUserSession))
-                    const returnUrl = router.query.returnUrl || "/";
-                    router.push(returnUrl)
-                }
-            })
-            .catch(error => {
-                setError("apiError", {message: error})
-            })
+        try{
+            const {data, errors} = await createUserSession({variables: { email, password }})
+
+            if(errors) {
+                setError("apiError", {message: errors})
+            }
+    
+            if(data) {
+                dispatch(setSession(data.createUserSession))
+            }
+
+        }catch(e){
+            setError("apiError", {message: error})
+        }
+        
+      
     }
+
+    useEffect( () => {
+        if(session.id && !favorites ) {
+            getFavorites({variables: {user_id: session.user.id}})
+        }
+        if(favorites) {
+            dispatch(setFavorites(favorites.userFavorites))
+
+            let returnUrl = router.query.returnUrl || "/";
+
+            if(router.query.hasOwnProperty("favorite")) {
+                returnUrl += "?favorite=1"
+            }
+
+            router.push(returnUrl)
+        }
+
+    },[ session, favorites])
+
 
     useEffect( () => {
         setFocus("email")
     },[setFocus])
 
+
     const [typed, setTyped ] = useState({email: false, password: false});
 
 
-    const setTypedState = (e, label) => {
-        if(e.target.value.length > 0) {
-            setTyped({...typed, [label]: true})
-        }else{
-            setTyped({...typed, [label]: false})
-        }
-
+    const setTypedState = (e, label) => (e.target.value.length > 0) ? setTyped({...typed, [label]: true}) : setTyped({...typed, [label]: false})
         
-    }
-    console.log(typed)
 
-    return <Form onSubmit={handleSubmit(onSubmit)}>
+return <Form onSubmit={handleSubmit(onSubmit)}>
+        {errors.apiError && <span className="apiError error">{errors.apiError?.message}</span>}
         <div className="input-container">
             <input 
                 disabled={isSubmitting} 
@@ -93,7 +115,7 @@ const Login = () => {
             <Link href="/reset-password">forgot your password?</Link>
             <Link href="/signup">Sign up</Link>
         </div>
-        {errors.apiError && <div>{errors.apiError?.message}</div>}
+        
     </Form>;
 };
 export default Login;

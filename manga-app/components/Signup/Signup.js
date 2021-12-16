@@ -59,13 +59,7 @@ const Signup = () => {
     const [typed, setTyped ] = useState({ name:false ,email: false, confirmEmail: false, password: false, confirmPassword: false});
 
 
-    const setTypedState = (e, label) => {
-        if(e.target.value.length > 0) {
-            setTyped({...typed, [label]: true})
-        }else{
-            setTyped({...typed, [label]: false})
-        }
-    }
+    const setTypedState = (e, label) => (e.target.value.length > 0) ? setTyped({...typed, [label]: true}) : setTyped({...typed, [label]: false})
 
     return <Form onSubmit={handleSubmit(onSubmit)}>
         {errors.apiError && <div className="apiError">{errors.apiError?.message}</div>}

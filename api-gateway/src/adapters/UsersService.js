@@ -39,4 +39,25 @@ export default class UsersService {
 
         return data
     }
+
+
+    static async fetchUserFavorites({user_id}) {
+        const { data } = await Axios.get(`${USERS_SERVICE_URI}/favorites/${user_id}`);
+
+        return data
+    }
+
+
+    static async createUserFavorite({ user_id, manga_id}) {
+        const { data } = await Axios.post(`${USERS_SERVICE_URI}/favorites/${user_id}/${manga_id}`);
+
+        return data;
+    }
+
+    static async deleteUserFavorite({ user_id, manga_id }) {
+        const { data } = await Axios.delete(`${USERS_SERVICE_URI}/favorites/${user_id}/${manga_id}`)
+        
+        return data;
+    }
+
 }

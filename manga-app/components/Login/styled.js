@@ -4,6 +4,7 @@ export const Form = styled.form`
     display:flex;
     flex-flow: column nowrap;
     justify-content: flex-end;
+    position: relative;
     
     .input-container{
         position: relative;
@@ -32,12 +33,10 @@ export const Form = styled.form`
         font-size: inherit;
      
         &:not([type="submit"]) {
-            border: 1px solid white;
+            border: 1px solid var(--login-border-color);
             border-radius: 3px;
             background: transparent;
-            &.error ~ span.error{
-                color:red;
-            }
+           
        }
        
        &:focus ~ label,&:not(:focus).typed ~ label {
@@ -52,6 +51,15 @@ export const Form = styled.form`
     span.error{
         margin-top:0.25rem;
         font-size: 85%;
+        color:red;
+    }
+
+    span.apiError{
+        text-align:center;
+        position: absolute;
+        top: -20%;
+        width: 100%;
+        font-size: 100%;
     }
 
     .links{

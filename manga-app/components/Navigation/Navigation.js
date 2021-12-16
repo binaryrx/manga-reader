@@ -47,6 +47,19 @@ const Navigation = props => {
 
     const navRef = useRef(null);
 
+    const handleClickOutsideSelect = (e) => {
+        if (navRef.current && !navRef.current.contains(e.target) && !e.target.classList.contains("navbar-toggle")) {
+            setNavOpen(false);
+        }
+    }
+
+    useEffect( () => {
+        document.addEventListener("click", handleClickOutsideSelect, true);
+        return () => {
+            document.removeEventListener("click", handleClickOutsideSelect, true)
+        }
+    },[])
+
     useEffect(()=> {
         
         const setNavHeight = () => {
@@ -80,13 +93,18 @@ const Navigation = props => {
     }, [navOpen])
 
 
+    const openCloseNav = () => {
+        matchMedia(mqSm).matches && navOpen ? setNavOpen(false) : setNavOpen(true)
+    }
+
+
     return(
         <Header>
             <nav className="navbar">
                 <div className="navbar-container">
                     <div className="navbar-header">
 
-                        <button className="navbar-toggle mobile" onClick={() => navOpen ? setNavOpen(false) : setNavOpen(true)}>
+                        <button className="navbar-toggle mobile" onClick={openCloseNav}>
                             <div className="sr-only">Toggle navigation</div>
                             <div className={`hamburger ${navOpen ? "open" : ""}`}>
                                 <div className="hamburger-line"></div>
@@ -117,10 +135,10 @@ const Navigation = props => {
                     </div>
 
                     <ul className={`navbar-nav ${navOpen ? "open" : ""}`} ref={navRef}>
-                        <li role="presentation">
+                        <li role="presentation" onClick={openCloseNav}>
                             <NavItem href="/latest" navName="Latest" pathName={router.pathname}/>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation" onClick={openCloseNav}>
                             <NavItem href="/popular" navName="popular" pathName={router.pathname}/>
                         </li>
                         <li role="presentation" className="seperator">
@@ -140,7 +158,7 @@ const Navigation = props => {
                                 </Link>
                             </Profile>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation" onClick={openCloseNav}>
                             <OpenSearch onClick={() => setSearchOpen(true)}>
                                 <img src={searchImg.src} />
                                 <span>Search</span>

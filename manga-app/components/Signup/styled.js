@@ -36,7 +36,7 @@ export const Form = styled.form`
         padding-left: 1rem;
         font-size: inherit;
         &:not([type="submit"]) {
-            border: 1px solid white;
+            border: 1px solid var(--login-border-color);
             border-radius: 3px;
             background: transparent;
             &.error ~ span.error{

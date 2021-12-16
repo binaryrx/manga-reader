@@ -48,7 +48,7 @@ export const Header = styled.header`
         &-toggle{
             padding:0;
             .hamburger{
-
+                pointer-events: none;
                 &-line{
                     width: 1.8rem;
                     height: 0.1875rem;
@@ -93,6 +93,15 @@ export const Header = styled.header`
                 height: 0px;
                 transition: height ${navTransitionSpeed} ease-in-out;
                 overflow: hidden;
+            }
+
+            li{
+                @media ${mqMd}, ${mqLg} {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
+                
             }
          
 

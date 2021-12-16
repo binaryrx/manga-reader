@@ -46,19 +46,9 @@ const Manga = ({ manga } = props) => {
     const [activeTab, setActiveTab] = useState(tabsContents[tabsContents.length -1]);
 
 
-    useEffect(() => {
-        console.log("RUN ON THE CLIENT")
-    },[])
-
-
     const setTab = (e) => {
         setActiveTab(tabsContents[e.target.dataset.section])
     }
-
-    
-
-    
-
 
     return (
         <>

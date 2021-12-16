@@ -14,8 +14,8 @@ const typeDefs = gql`
         description: String!
         updated_at: Date
         genres: [String!]
-        latestChapter: String!
-        latestChapterNum: Float!
+        latest_chapter: String!
+        latest_chapter_num: Float!
         chapters: [Chapter]
     }
 
@@ -34,6 +34,7 @@ const typeDefs = gql`
         id: ID!,
         name: String
     }
+
     type UserSession {
         created_at: Date!
         expires_at: Date!
@@ -41,11 +42,21 @@ const typeDefs = gql`
         user: User!
     }
 
+    type Favorite {
+        id: ID!
+        user_id: ID!
+        manga_id: Int!
+    }
+
     type Mutation {
         createUser(email: String!, password: String!, name: String): User!
         createUserSession(email: String!, password: String!): UserSession!
         deleteUserSession(session_id: ID!): Boolean!
+        createUserFavorite(user_id: String!, manga_id: Int!): Favorite!
+        deleteUserFavorite(user_id: String!, manga_id: Int!): Boolean!
     }
+
+   
 
     type Query {
         mangaByTitle(contains: String): Manga!
@@ -56,6 +67,9 @@ const typeDefs = gql`
         chapterByName(where: String!, contains: String!): Chapter!
         chaptersUrlsByName(contains: String!): [Chapter!]!
         userSession(me: Boolean!): UserSession
+        userIdBySession(contains: String!): UserSession
+        userFavorites(user_id: String!): [Favorite]!
+        mangasByIds(mangas_ids: [Int!]!): [Manga]!
     }
 
     

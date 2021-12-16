@@ -14,15 +14,16 @@ const GlobalStyle = createGlobalStyle`
         --nav-bg: #222;
         --nav-border-color: #111;
 		--nav-item-color: #c6c6c6;
-		
 
 		--body-bg: #f9f9f9;
 		--body-color: #222;
 
+		--login-border-color: black;
+
 		--latestMangas-box-shadow: 0 1px 3px rgb(0 0 0 / 30%);;
 
         --mangaPreview-genre-text: #af00ff;
-        --mangaPreview-genre-text-hover: #b36b00;
+        --mangaPreview-genre-text-hover: #ffffff;
         --mangaPreview-genre-font-weight: 400;
         --mangaPreview-genre-bg-hover: #af00ff;
         --mangaPreview-genre-border: 1px solid;
@@ -85,7 +86,8 @@ const GlobalStyle = createGlobalStyle`
 		--nav-color: #fff;
         --nav-bg: #222;
         --nav-border-color: #111;
-		
+
+		--login-border-color: white;
 
 		--latestMangas-box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
 
@@ -244,6 +246,8 @@ const GlobalStyle = createGlobalStyle`
 		cursor: pointer;
 		box-sizing: border-box;
 		font-family:inherit;
+		padding:0;
+		margin:0;
 	}
 
 	p{

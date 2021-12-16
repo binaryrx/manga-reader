@@ -7,8 +7,8 @@ const GET_ALL_MANGAS = gql`{
         genres
         cover_url
         updated_at
-        latestChapter
-        latestChapterNum
+        latest_chapter
+        latest_chapter_num
     }
 }`;
 export default GET_ALL_MANGAS;

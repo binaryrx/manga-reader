@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Layout, Chapter } from "#/components"
 import { initializeApollo } from '#/api/apollo'
-import { GET_CHAPTER_BY_NAME, GET_ALL_CHAPTERS_NAMES_BY_NAME } from '#/api/queries';
+import { GET_CHAPTER_BY_NAME, GET_ALL_CHAPTERS_NAMES_BY_MANGA_NAME } from '#/api/queries';
 
 export default function MangaByTitle(props) {
 	const chapter = props?.initialApolloState?.chapter?.data?.chapterByName
@@ -40,7 +40,7 @@ export const getServerSideProps = async ({ query }) => {
 		})
 		//return all the manga chapter nums + names
 		const chapters = await apolloClient.query({
-			query: GET_ALL_CHAPTERS_NAMES_BY_NAME,
+			query: GET_ALL_CHAPTERS_NAMES_BY_MANGA_NAME,
 			variables: { mangaName },
 		}) 
 	
@@ -49,7 +49,8 @@ export const getServerSideProps = async ({ query }) => {
 			chapters
 		}} }
 
-	}catch{
+	}catch(e){
+		console.log(e)
 		return { 
 			props: {
 			  error: "failed fetching data from backend - Chapter"
